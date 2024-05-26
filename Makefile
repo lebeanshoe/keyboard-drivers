@@ -1,16 +1,18 @@
-EXE = driver
-OBJS = driver.o
+CC = gcc
+CFLAGS = -std=gnu11 -g -Wall -I/usr/include/libusb-1.0
+LDFLAGS = -lusb-1.0
 
-CXX = g++
-CXXFLAGS = -std=c++11 -c -Wall -I/usr/include/libusb-1.0
-LD = g++
-LDFLAGS = -std=c++11 -lusb-1.0
+SOURCES = driver.c
+OBJS = $(SOURCES:.c=.o)
+TARGET = driver
 
-output: $(OBJS)
-	$(LD) $(OBJS) $(LDFLAGS) -o $(EXE)
+$(TARGET): $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
-driver.o: driver.cpp
-	$(CXX) $(CXXFLAGS) driver.cpp
+driver.o: driver.c
+	$(CC) $(CFLAGS) -c -o driver.o driver.c
+
+.PHONY: clean
 
 clean:
-	rm *.o $(EXE)
+	rm $(TARGET) $(OBJS)
